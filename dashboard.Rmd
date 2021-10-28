@@ -1,0 +1,69 @@
+---
+title: "Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+# rmarkdown::render("dashboard_template.Rmd", output_format = "flexdashboard::flex_dashboard")
+library(flexdashboard)
+
+library(tidyverse)
+library(p8105.datasets)
+
+library(plotly)
+```
+
+```{r}
+data("nyc_airbnb")
+
+nyc_airbnb <-
+  nyc_airbnb %>%
+  mutate(stars = review_scores_location/2) %>%
+  select(neighbourhood_group, neighbourhood, stars, 
+         price, room_type, lat, long) %>%
+  filter(
+    neighbourhood_group == "Manhattan",
+    room_type == "Entire home/apt",
+    price %in% 100:500
+  ) %>%
+  drop_na(stars)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+nyc_airbnb %>%
+  mutate(
+    text_label = str_c("Price $", price, "\nStars: ", stars)
+  ) %>%
+  plot_ly(
+    # ~ total
+    x = ~lat, y = ~long, type = "scatter", mode = "markers",
+    color = ~price,
+    alpha = .5,
+    text = ~text_label
+  )
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
