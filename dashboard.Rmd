@@ -58,12 +58,21 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-
+nyc_airbnb %>%
+  mutate(
+    neighbourhood = fct_reorder(neighbourhood, price)
+  ) %>%
+  plot_ly(y = ~ price, color = ~neighbourhood, type = "box")
 ```
 
 ### Chart C
 
 ```{r}
-
+nyc_airbnb %>%
+  count(neighbourhood) %>%
+  mutate(
+    neighbourhood = fct_reorder(neighbourhood, n)
+  ) %>%
+  plot_ly(x = ~ neighbourhood, y = ~ n, color = ~neighbourhood, type = "bar")
 ```
 
